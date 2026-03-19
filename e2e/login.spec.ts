@@ -33,8 +33,7 @@ test.describe('Login Flow E2E', () => {
 
     await page.getByRole('button', { name: /masuk sekarang/i }).click();
 
-    await page.waitForLoadState('networkidle');
-
+    await expect(page.getByRole('button', { name: /logout|keluar/i })).toBeVisible({ timeout: 10000 });
     await expect(page).toHaveURL(/\/(home)?$/);
 
 
