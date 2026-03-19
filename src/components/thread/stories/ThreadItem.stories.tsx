@@ -1,21 +1,10 @@
+/* eslint-disable storybook/no-renderer-packages */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Meta, StoryObj } from '@storybook/react';
 import ThreadItem from '../ThreadItem';
 import { Thread, User } from '@/src/types';
 
-/**
- * ThreadItem Component Stories
- *
- * Stories ini menunjukkan berbagai state dan variasi dari ThreadItem component.
- *
- * ## Features
- * - Thread information display
- * - Vote buttons (upvote/downvote)
- * - Comment count
- * - Category badge
- * - Owner information
- * - Clickable thread title
- */
+
 
 const mockOwner: User = {
   id: 'user-1',
@@ -93,10 +82,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default state dari ThreadItem.
- * Thread dengan beberapa votes dan comments.
- */
+
 export const Default: Story = {
   args: {
     thread: mockThread,
@@ -108,15 +94,12 @@ export const Default: Story = {
   },
 };
 
-/**
- * Thread yang sudah di-upvote oleh user saat ini.
- * Menunjukkan active state pada upvote button.
- */
+
 export const Upvoted: Story = {
   args: {
     thread: {
       ...mockThread,
-      upVotesBy: ['user-2', 'user-3', 'user-4'], // user-2 adalah current user
+      upVotesBy: ['user-2', 'user-3', 'user-4'],
       downVotesBy: [],
     },
     owner: mockOwner,
@@ -127,16 +110,13 @@ export const Upvoted: Story = {
   },
 };
 
-/**
- * Thread yang sudah di-downvote oleh user saat ini.
- * Menunjukkan active state pada downvote button.
- */
+
 export const Downvoted: Story = {
   args: {
     thread: {
       ...mockThread,
       upVotesBy: [],
-      downVotesBy: ['user-2', 'user-5'], // user-2 adalah current user
+      downVotesBy: ['user-2', 'user-5'],
     },
     owner: mockOwner,
     authUser: mockAuthUser,
@@ -146,10 +126,7 @@ export const Downvoted: Story = {
   },
 };
 
-/**
- * Thread populer dengan banyak votes dan comments.
- * Menunjukkan thread yang sedang trending.
- */
+
 export const Popular: Story = {
   args: {
     thread: {
@@ -167,10 +144,7 @@ export const Popular: Story = {
   },
 };
 
-/**
- * Thread baru tanpa votes dan comments.
- * Menunjukkan thread yang baru saja dibuat.
- */
+
 export const NewThread: Story = {
   args: {
     thread: {
@@ -190,25 +164,18 @@ export const NewThread: Story = {
   },
 };
 
-/**
- * Thread saat user belum login.
- * Voting akan trigger alert untuk login.
- */
 export const NotLoggedIn: Story = {
   args: {
     thread: mockThread,
     owner: mockOwner,
-    authUser: null, // User tidak login
+    authUser: null,
     onThreadClick: (threadId: any) => console.log('Clicked thread:', threadId),
     onUpVote: (threadId: any) => console.log('Upvoted:', threadId),
     onDownVote: (threadId: any) => console.log('Downvoted:', threadId),
   },
 };
 
-/**
- * Thread dengan body yang panjang.
- * Menunjukkan truncation/ellipsis pada preview.
- */
+
 export const LongContent: Story = {
   args: {
     thread: {
@@ -224,10 +191,7 @@ export const LongContent: Story = {
   },
 };
 
-/**
- * Thread dengan kategori berbeda.
- * Menunjukkan variasi category badge.
- */
+
 export const DifferentCategory: Story = {
   args: {
     thread: {
@@ -243,13 +207,10 @@ export const DifferentCategory: Story = {
   },
 };
 
-/**
- * Multiple thread items dalam list.
- * Menunjukkan bagaimana ThreadItem terlihat dalam daftar.
- */
+
 export const InList: Story = {
   args: {
-    thread: mockThread, // Diberikan fallback agar TypeScript Storybook tidak protes
+    thread: mockThread,
     owner: mockOwner,
     authUser: mockAuthUser,
     onThreadClick: (threadId: any) => console.log('Clicked thread:', threadId),

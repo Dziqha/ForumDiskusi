@@ -52,7 +52,6 @@ describe('threadDetailReducer', () => {
       payload: { comment: newComment },
     };
 
-    // Test branch: if (!threadDetail) return null;
     expect(threadDetailReducer(null, action)).toBeNull();
 
     const nextState = threadDetailReducer(mockThreadDetail, action);
@@ -61,7 +60,6 @@ describe('threadDetailReducer', () => {
 
   describe('TOGGLE_UPVOTE_THREAD action', () => {
     it('should toggle upvote on thread detail correctly', () => {
-      // Skenario 1: Menambah Upvote & menghapus downvote (untuk branch filter downvote)
       const initialState = { ...mockThreadDetail, downVotesBy: ['user-1'] };
       const actionAdd = {
         type: ActionType.TOGGLE_UPVOTE_THREAD,
@@ -71,7 +69,6 @@ describe('threadDetailReducer', () => {
       expect(stateAfterAdd?.upVotesBy).toContain('user-1');
       expect(stateAfterAdd?.downVotesBy).not.toContain('user-1');
 
-      // Skenario 2: Mencabut Upvote (isUpVoted: true) -> Test branch filter upvote
       const actionRemove = {
         type: ActionType.TOGGLE_UPVOTE_THREAD,
         payload: { threadId: 'thread-1', userId: 'user-1', isUpVoted: true },
@@ -79,7 +76,6 @@ describe('threadDetailReducer', () => {
       const stateAfterRemove = threadDetailReducer(stateAfterAdd, actionRemove);
       expect(stateAfterRemove?.upVotesBy).not.toContain('user-1');
 
-      // Skenario 3: ID tidak cocok -> Test branch return threadDetail;
       const actionWrongId = {
         type: ActionType.TOGGLE_UPVOTE_THREAD,
         payload: { threadId: 'wrong-id', userId: 'user-1', isUpVoted: false },
@@ -94,25 +90,22 @@ describe('threadDetailReducer', () => {
         payload: { threadId: 'wrong-id', userId: 'user-1', isUpVoted: false },
       };
       const nextState = threadDetailReducer(mockThreadDetail, action);
-      expect(nextState).toBe(mockThreadDetail); // Baris 47 tuntas!
+      expect(nextState).toBe(mockThreadDetail);
     });
     it('should return the current threadDetail if threadId does not match during upvote', () => {
-      // Arrange
       const initialState = { ...mockThreadDetail, id: 'thread-1' };
       const action = {
         type: ActionType.TOGGLE_UPVOTE_THREAD,
         payload: {
-          threadId: 'thread-berbeda', // ID yang sengaja dibuat tidak cocok
+          threadId: 'thread-berbeda',
           userId: 'user-1',
           isUpVoted: false,
         },
       };
 
-      // Action
       const nextState = threadDetailReducer(initialState, action);
 
-      // Assert
-      // State harus tetap sama persis karena ID tidak cocok
+
       expect(nextState).toEqual(initialState);
     });
   });
@@ -136,7 +129,6 @@ describe('threadDetailReducer', () => {
       expect(stateAfterRemove?.downVotesBy).not.toContain('user-1');
     });
     it('should return the current threadDetail if threadId does not match during downvote', () => {
-      // Action dengan ID yang salah untuk Downvote
       const action = {
         type: ActionType.TOGGLE_DOWNVOTE_THREAD,
         payload: {
@@ -148,7 +140,6 @@ describe('threadDetailReducer', () => {
 
       const nextState = threadDetailReducer(mockThreadDetail, action);
 
-      // Assert
       expect(nextState).toBe(mockThreadDetail);
     });
   });
@@ -168,7 +159,6 @@ describe('threadDetailReducer', () => {
         comments: [comment, { ...comment, id: 'comment-2' }],
       };
 
-      // Test branch: if (!threadDetail) return null;
       expect(
         threadDetailReducer(null, {
           type: ActionType.TOGGLE_UPVOTE_COMMENT,
@@ -182,7 +172,7 @@ describe('threadDetailReducer', () => {
       const stateAfterAdd = threadDetailReducer(initialState, actionAdd);
       expect(stateAfterAdd?.comments[0].upVotesBy).toContain('user-1');
       expect(stateAfterAdd?.comments[0].downVotesBy).not.toContain('user-1');
-      expect(stateAfterAdd?.comments[1].id).toBe('comment-2'); // ID tidak cocok branch
+      expect(stateAfterAdd?.comments[1].id).toBe('comment-2');
 
       const actionRemove = {
         type: ActionType.TOGGLE_UPVOTE_COMMENT,
@@ -205,7 +195,6 @@ describe('threadDetailReducer', () => {
       };
       const initialState = { ...mockThreadDetail, comments: [comment] };
 
-      // Test branch: if (!threadDetail) return null;
       expect(
         threadDetailReducer(null, {
           type: ActionType.TOGGLE_DOWNVOTE_COMMENT,
@@ -254,7 +243,7 @@ describe('threadDetailReducer', () => {
         },
       };
       const nextState = threadDetailReducer(initialState, action);
-      expect(nextState?.comments[0]).toBe(comment); // Baris 85 tuntas!
+      expect(nextState?.comments[0]).toBe(comment);
     });
   });
 });

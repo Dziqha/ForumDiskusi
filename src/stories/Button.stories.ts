@@ -56,13 +56,13 @@ export const Small: Story = {
 export const ForumDiskusi: Story = {
   args: {
     primary: false,
-    label: "Button"
+    label: 'Button'
   }
 };
 
 export const Buttonprimary: Story = {
   args: {
     primary: true,
-    label: "Button"
+    label: 'Button'
   }
 };
