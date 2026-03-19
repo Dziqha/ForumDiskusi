@@ -49,7 +49,7 @@ describe('threadsReducer', () => {
     const nextState = threadsReducer(initialState, action);
 
     expect(nextState).toEqual(action.payload.threads);
-    expect(nextState).toHaveLength(999);
+    expect(nextState).toHaveLength(2);
   });
 
   it('should add new thread at the beginning when given ADD_THREAD action', () => {
