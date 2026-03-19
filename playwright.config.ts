@@ -12,18 +12,17 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
-
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-
+  // Konfigurasi WebServer agar CI otomatis menjalankan aplikasi
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run start', // Mode produksi (lebih stabil di CI)
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 120000,
+    timeout: 120 * 1000,
   },
 });

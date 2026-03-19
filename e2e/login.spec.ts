@@ -22,21 +22,49 @@ test.describe('Login Flow E2E', () => {
   });
 
   test('should successfully login with valid credentials', async ({ page }) => {
+    await page.route('**/login', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          status: 'success',
+          message: 'Login success',
+          data: { token: 'mock-token-123' },
+        }),
+      });
+    });
+
+    await page.route('**/users/me', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          status: 'success',
+          data: {
+            user: {
+              id: 'user-1',
+              name: 'testuser',
+              email: 'bisajaya@gmail.com',
+            },
+          },
+        }),
+      });
+    });
+
     page.on('dialog', async (dialog) => {
       console.log('Dialog message:', dialog.message());
       await dialog.accept();
     });
-
 
     await page.getByLabel(/email/i).fill('bisajaya@gmail.com');
     await page.getByLabel(/password/i).fill('qwertyui');
 
     await page.getByRole('button', { name: /masuk sekarang/i }).click();
 
-    await page.waitForLoadState('networkidle');
-
+    await expect(
+      page.getByRole('button', { name: /logout|keluar/i }),
+    ).toBeVisible({ timeout: 10000 });
     await expect(page).toHaveURL(/\/(home)?$/);
-
 
     const logoutButton = page.getByRole('button', { name: /logout|keluar/i });
     const userMenu = page.getByText(/testuser/i);
@@ -51,6 +79,17 @@ test.describe('Login Flow E2E', () => {
   test('should show error message with invalid credentials', async ({
     page,
   }) => {
+    await page.route('**/login', async (route) => {
+      await route.fulfill({
+        status: 401,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          status: 'fail',
+          message: 'email or password is wrong',
+        }),
+      });
+    });
+
     await page.getByLabel(/email/i).fill('invalid@example.com');
     await page.getByLabel(/password/i).fill('wrongpassword');
 
